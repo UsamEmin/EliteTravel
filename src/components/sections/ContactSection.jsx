@@ -144,7 +144,7 @@ export default function ContactSection() {
                {/* Gerçek İframe */}
                <iframe 
                  title="Elite Travel Location"
-                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.650490016336!2d28.9763139!3d41.0082402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab9be92011c27%3A0x236e6f6f37444fae!2sSultanahmet%20Meydan%C4%B1!5e0!3m2!1str!2str!4v1709900000000!5m2!1str!2str" 
+                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2457.8433436957807!2d5.949565077182977!3d51.97328077192289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c7a40dc19b323b%3A0x725e5c549d8fd064!2sLeemansweg%2027%20G%2C%206827%20BX%20Arnhem%2C%20Hollanda!5e0!3m2!1str!2str!4v1765302038602!5m2!1str!2str"
                  width="100%" 
                  height="100%" 
                  style={{ border: 0 }} 
