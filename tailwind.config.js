@@ -7,22 +7,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        elite: {
-          base: "#f6f7f9",      // Ana zemin
-          card: "#ffffff",      // Kart zemini
-          dark: "#0b3954",      // Logo Lacivert (Metin/Vurgu)
-          gold: "#f4b41a",      // Logo Altın (Accent)
-          text: "#111827",      // Koyu Metin
-          muted: "#4b5563",     // Gri Metin
-          'elite-dark': '#163a58',  // Koyu Lacivert (Logodaki)
-        'elite-gold': '#dca725',  // Altın Sarısı (Logodaki)
-        'elite-base': '#f8fafc',  // Zemin için çok açık gri
-        }
+        // 1. ELITE GRUBU (Eski yapıyı bozmamak için ama YENİ RENKLERLE)
+     
+        // 2. GARANTİ LİNKLER (Benim attığım kodlar bazen direkt burayı arıyor)
+        // Bu sayede 'bg-elite-dark' yazdığında kesinlikle çalışacak.
+       'elite-dark': '#163a58',  // Lacivert
+        'elite-gold': '#dca725',  // Altın
+        'elite-base': '#f8fafc',  // Açık Gri
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'], // Google Fonts'tan index.html'e eklemeyi unutma
+        sans: ['Inter', 'sans-serif'], 
       }
-      
     },
   },
   plugins: [],

@@ -1,17 +1,14 @@
-import logoImg from '../../assets/elitelogo.svg'; 
+import logoImg from '../../assets/elitelogo.svg'; // Logonun yeri doğru mu kontrol et
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom'; // Hangi sayfadayız anlamak için
-import { Menu, X, ChevronDown, Phone } from 'lucide-react';
-
+import { useLocation } from 'react-router-dom';
+import { Menu, X, ChevronDown, Phone, CalendarCheck } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
-  // URL'yi takip ediyoruz ki aktif menü rengi değişsin (Sarı yansın)
-  const location = useLocation(); 
+  const location = useLocation();
 
-  // Scroll efekti
+  // Scroll takibi: Sayfa aşağı kayınca navbar beyazlaşır ve gölge alır
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -20,51 +17,43 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // --- MENU LİNKLERİ (App.js ile Eşleşmeli) ---
+  // --- MENU YAPISI ---
   const navLinks = [
     { name: 'Ana Sayfa', href: '/', hasDropdown: false },
-    
-    // TURLAR -> /turlar sayfasına gider
     { 
       name: 'Turlar', 
       href: '/turlar', 
       hasDropdown: true, 
       subItems: [
         { name: 'Tüm Turlar', href: '/turlar' },
-        // Kategori filtrelerini ileride yaparsak diye query parametresi ekledim
         { name: 'Osmanlı Başkentleri', href: '/turlar?cat=osmanli' },
         { name: 'Kudüs & Maneviyat', href: '/turlar?cat=kudus' }
       ]
     },
-    
-    // KURUMSAL -> /hakkimizda sayfasına gider
     { name: 'Kurumsal', href: '/hakkimizda', hasDropdown: false },
-    
-    // İLETİŞİM -> /iletisim sayfasına gider
     { name: 'İletişim', href: '/iletisim', hasDropdown: false },
   ];
 
-  // Link aktif mi kontrolü (örn: /iletisim sayfasındaysak true döner)
+  // Aktif link kontrolü (Sarı yakmak için)
   const isActive = (path) => {
-    // Ana sayfa için tam eşleşme, diğerleri için 'ile başlıyor mu' kontrolü
     if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path);
+    return location.pathname.startsWith(path.split('?')[0]);
   };
 
   return (
     <nav 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 font-sans ${
-        scrolled ? 'bg-white shadow-md py-3' : 'bg-white/95 py-5 border-b border-gray-100'
+        scrolled ? 'bg-white shadow-lg py-3' : 'bg-white/95 py-5 border-b border-gray-100'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
         
-        {/* LOGO */}
-        <a href="/" className="flex-shrink-0">
+        {/* --- LOGO --- */}
+        <a href="/" className="flex-shrink-0 group">
           <img 
             src={logoImg} 
             alt="Elite Travel" 
-            className={`transition-all duration-300 object-contain ${scrolled ? 'h-10' : 'h-12'}`} 
+            className={`transition-all duration-300 object-contain group-hover:scale-105 ${scrolled ? 'h-10' : 'h-12'}`} 
           />
         </a>
 
@@ -74,27 +63,32 @@ const Navbar = () => {
             {navLinks.map((link, index) => (
               <li key={index} className="relative group h-full flex items-center">
                 
-                {/* Link Yapısı (Sayfa Yenilenerek Geçer) */}
+                {/* Ana Linkler */}
                 <a 
                   href={link.href} 
                   className={`flex items-center gap-1 text-[15px] font-semibold transition-colors py-2 ${
-                    isActive(link.href.split('?')[0]) ? 'text-elite-gold' : 'text-elite-dark hover:text-elite-gold'
+                    isActive(link.href) 
+                      ? 'text-[#dca725]' // Aktifse Altın Sarısı
+                      : 'text-[#163a58] hover:text-[#dca725]' // Değilse Lacivert -> Altın (Hover)
                   }`}
                 >
                   {link.name}
-                  {link.hasDropdown && <ChevronDown size={14} className="mt-0.5 group-hover:rotate-180 transition-transform" />}
+                  {link.hasDropdown && (
+                    <ChevronDown size={14} className="mt-0.5 group-hover:rotate-180 transition-transform duration-300" />
+                  )}
                 </a>
 
-                {/* Dropdown */}
+                {/* Dropdown Menü (Açılır Kutu) */}
                 {link.hasDropdown && (
-                  <div className="absolute top-full -left-4 w-56 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    <div className="bg-white shadow-xl rounded-lg border-t-4 border-elite-gold overflow-hidden py-2">
+                  <div className="absolute top-full -left-4 w-60 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                    <div className="bg-white shadow-2xl rounded-xl border-t-4 border-[#dca725] overflow-hidden py-2">
                       {link.subItems.map((sub, subIndex) => (
                         <a 
                           key={subIndex}
                           href={sub.href} 
-                          className="block px-6 py-3 text-sm text-elite-dark hover:bg-gray-50 hover:text-elite-gold transition-colors border-b border-gray-50 last:border-0"
+                          className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-[#163a58] hover:bg-[#163a58]/5 hover:text-[#dca725] transition-colors border-b border-gray-50 last:border-0"
                         >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#dca725] opacity-0 group-hover:opacity-100 transition-opacity"></span>
                           {sub.name}
                         </a>
                       ))}
@@ -105,12 +99,13 @@ const Navbar = () => {
             ))}
           </ul>
 
-          {/* İletişim Butonu (Masaüstü) */}
+          {/* Aksiyon Butonu (Bize Ulaşın) */}
           <a 
             href="/iletisim" 
-            className="hidden lg:flex items-center gap-2 px-6 py-2.5 bg-[#163a58] text-white text-sm font-bold rounded hover:bg-opacity-90 transition-all duration-300 shadow-lg shadow-[#163a58]/20"
+            // bg-[#163a58] ve text-white ile renkleri sabitledik.
+            className="hidden lg:flex items-center gap-2 px-6 py-2.5 bg-[#163a58] text-white text-sm font-bold rounded-lg hover:bg-[#dca725] hover:text-[#163a58] transition-all duration-300 shadow-lg shadow-[#163a58]/20 group"
           >
-            <Phone size={16} className="text-[#dca725]" />
+            <Phone size={16} className="text-[#dca725] group-hover:text-[#163a58] transition-colors" />
             <span>Bize Ulaşın</span>
           </a>
         </div>
@@ -118,33 +113,38 @@ const Navbar = () => {
         {/* --- MOBİL MENÜ BUTONU --- */}
         <button 
           onClick={() => setIsOpen(!isOpen)} 
-          className="md:hidden text-elite-dark hover:text-elite-gold transition-colors"
+          className="md:hidden text-[#163a58] hover:text-[#dca725] transition-colors"
         >
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
       {/* --- MOBİL MENÜ İÇERİK --- */}
-      <div className={`md:hidden bg-white border-t border-gray-100 absolute w-full left-0 transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[400px] opacity-100 shadow-xl' : 'max-h-0 opacity-0'}`}>
-        <ul className="flex flex-col py-4 px-6 gap-4">
+      <div 
+        className={`md:hidden bg-white border-t border-gray-100 absolute w-full left-0 transition-all duration-300 ease-in-out overflow-hidden ${
+          isOpen ? 'max-h-[500px] opacity-100 shadow-2xl' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <ul className="flex flex-col py-6 px-6 gap-5">
           {navLinks.map((link, index) => (
             <li key={index}>
               <a 
                 href={link.href} 
-                className={`flex justify-between items-center font-medium text-lg ${
-                  isActive(link.href.split('?')[0]) ? 'text-elite-gold' : 'text-elite-dark'
+                className={`flex justify-between items-center font-bold text-lg ${
+                  isActive(link.href) ? 'text-[#dca725]' : 'text-[#163a58]'
                 }`}
               >
                 {link.name}
               </a>
-              {/* Mobil Alt Menüler */}
+              
+              {/* Mobil Dropdown Linkleri */}
               {link.hasDropdown && (
-                <div className="pl-4 mt-2 space-y-2 border-l-2 border-gray-100">
+                <div className="pl-4 mt-3 space-y-3 border-l-2 border-[#dca725]/30">
                   {link.subItems.map((sub, subIndex) => (
                      <a 
                         key={subIndex} 
                         href={sub.href}
-                        className="block text-sm text-gray-500 hover:text-elite-gold"
+                        className="block text-sm font-medium text-gray-500 hover:text-[#dca725] transition-colors"
                      >
                        {sub.name}
                      </a>
@@ -153,11 +153,14 @@ const Navbar = () => {
               )}
             </li>
           ))}
+          
+          {/* Mobilde "Plan Yap" Butonu */}
           <a 
             href="/turlar" 
-            className="mt-2 w-full py-3 bg-elite-gold text-elite-dark font-bold rounded text-center block"
+            className="mt-4 w-full py-3 bg-[#dca725] text-[#163a58] font-bold rounded-xl text-center shadow-md flex items-center justify-center gap-2 hover:bg-[#c59620] transition-colors"
           >
-            Plan Yap
+            <CalendarCheck size={18} />
+            Hemen Planla
           </a>
         </ul>
       </div>

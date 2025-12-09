@@ -34,9 +34,7 @@ export default function HomePage() {
       {/* YENİ FAQ BÖLÜMÜ */}
       <FAQSection />
 
-      <div className="container mx-auto px-4 pb-20">
-        <ContactSection />
-      </div>
+      
     </>
   );
 }
